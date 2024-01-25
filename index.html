@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week_3</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("https://cdn.pixabay.com/photo/2020/06/02/05/31/hell-5249470_1280.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+
+        .school-container {
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #dac5c5;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        
+        .school-container h1 {
+            color: #333;
+        }
+
+        
+        .school-info {
+            margin-bottom: 10px;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .orange {
+            color: orange;
+        }
+
+        .yellow {
+            color: yellow;
+        }
+
+        .green {
+            color: green;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <template id="schoolTemplate" type="x-template">
+        <div class="school-container" >
+            <h1>{{ pageTitle }}</h1>
+            <div v-html="pic"></div>
+            <h2>{{ sectionTitle }}</h2>
+            <h3>Name: {{ fullName() }} </h3>
+            <h3>Tech ID: {{ techID }}</h3>
+            <ul>
+                <li class="school-info">Major: {{ major }}</li>
+                <li class="school-info">Expected Graduation Year: {{ gradYear }} </li>
+                <li class="school-info" v-bind:class="setGPAColor">GPA:{{ gpa }}</li> 
+                 <!-- When I set the v-bind:class to gpaColor it doesn't work  -->
+            </ul>
+            <button type="button" id="setID">Show TechID</button>
+        </div>
+    </template>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    
+    <script type="text/javascript">
+        var app = new Vue({
+            el: "#app",
+            data: {
+                pageTitle: "Student Info",
+                sectionTitle: "Student",
+                firstName: "Joe",
+                lastName: "Shmoe",
+                techID: null,
+                major: "Computer Programming",
+                gradYear: "Fall-2024",
+                gpa: "0.8",
+                gpaColor: null, //This doesn't seem to do anything, not sure what I'm doing wrong. Little confusing :-( but made it work :-)
+                pic: "<img src=\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY-C_PBuymDAZG80708vgccyF6KpjSHV5uw-Ut9K2tiQyEx01QMXIr_cUXZ5kGiVAvblY&usqp=CAU\" alt=\"pic\">"
+            },
+            template: "#schoolTemplate",
+            methods: {
+                fullName: function() {
+                    return this.lastName + ", " + this.firstName;
+                }
+            },
+            computed: {
+                setGPAColor: function() {
+                    let gpaColor = parseFloat(this.gpa);
+
+                    if (gpaColor >= 3.1 && gpaColor <= 4) {
+                        return 'green';
+                    } else if (gpaColor >= 2.1 && gpaColor < 3.1) {
+                        return 'yellow';
+                    } else if (gpaColor >= 1.1 && gpaColor < 2.1) {
+                        return 'orange';
+                    } else {
+                        return 'red';
+                    }
+                }
+            },
+        });
+
+        var btn = document.getElementById("setID");
+        btn.onclick = function() {
+            if(!app.$data.techID){
+                app.$data.techID = "1234567890";
+            }else{
+                app.$data.techID = null;
+            }
+        }
+    </script>
+</body>
+</html>
