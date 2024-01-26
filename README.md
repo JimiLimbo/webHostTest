@@ -1,2 +1,3 @@
 # webHostTest
-Hosting a website from github
+Testing how to host a website from github.
+
