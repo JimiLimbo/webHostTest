@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week_3</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("https://cdn.pixabay.com/photo/2020/06/02/05/31/hell-5249470_1280.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .school-container {
+            max-width: 340px;
+            margin: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.3); 
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px; 
+        }
+        
+        .school-container h1 {
+            color: #333;
+        }
+        
+        .school-info {
+            margin-bottom: 10px;
+        }
+    </style>   
+</head>
+<body>
+    <div id="app">
+        <div v-for="(student, index) in students" :key="student.techID" class="school-container">
+            <div v-if="index === currentIndex">
+                <h1>{{ pageTitle }}</h1>
+                <div v-html="student.pic"></div>
+                <h2>{{ sectionTitle }}</h2>
+                <h3>Name: {{ student.firstName }} {{ student.lastName }}</h3>
+                <h3>Tech ID: {{ student.techID }}</h3>
+                <ul>
+                    <li class="school-info">
+                        Major Details:
+                        <ul>
+                            <li v-for="(value, key, i) in student.major" :key="i">{{ key }}: {{ value }}</li>
+                        </ul>
+                    </li>
+                    <li class="school-info" v-show="showGradYear(student.gradYear)">Expected Graduation Year: {{ student.gradYear }}</li>
+                    <li class="school-info">GPA: {{ student.gpa }} - Grade: <span v-if="student.gpa > 3">A</span>
+                        <span v-else-if="student.gpa > 2">B</span>
+                        <span v-else-if="student.gpa > 1">C</span>
+                        <span v-else-if="student.gpa > 0">D</span>
+                        <span v-else>F</span>
+                    </li>
+                </ul>
+                <hr v-if="index < students.length - 1">
+            </div>
+        </div>
+    </div>
+    <!-- (-: Pretty sure I've got it all covered, got a 'lil side tracked :-) -->
+    <script type="module">
+        import confetti from 'https://cdn.skypack.dev/canvas-confetti';
+        window.confetti = confetti; 
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: "#app",
+            data: {
+                pageTitle: "Student Info",
+                sectionTitle: "Student",
+                students: [
+                    {firstName: "Joe", lastName: "Shmoe", major: { Name: "Computer Programming", "Total credits": 120, Id: "CP101" }, gradYear: "Fall-2024", gpa: 3.5, techID: "123456789", pic: "<img src=\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY-C_PBuymDAZG80708vgccyF6KpjSHV5uw-Ut9K2tiQyEx01QMXIr_cUXZ5kGiVAvblY&usqp=CAU\" alt=\"pic\">" }, {firstName: "Harry", lastName: "Hemp", major: { Name: "Computer Science", "Total credits": 140, Id: "CS101" }, gradYear:null, gpa: 2.5, techID: "127893456", pic: "<img src=\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPsOaVKbTXYKx0uXT9q3G45qYsZ3194MGSbA&usqp=CAU\" alt=\"pic\">"}, {firstName: "Al", lastName: "Coholic", major: { Name: "Computer Engineering", "Total credits": 160, Id: "CE101" }, gradYear: null, gpa: 1.8, techID: "456789123", pic: "<img src=\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS76mbh5JJqyA_6b9S3GyDUHiQdOit36k9GkfXO1oirItJYbKTKw72wJv5VFC4T0_RIAl0&usqp=CAU\" alt=\"pic\">"}
+                ],
+                currentIndex: 0, 
+            },
+            methods: {
+                showGradYear(gradYear) {
+                    return gradYear !== null;
+                },
+                cycleStudents() {
+                    setInterval(() => {
+                        this.currentIndex = (this.currentIndex + 1) % this.students.length;
+                        this.triggerConfetti();
+                    }, 5000); 
+                },
+                triggerConfetti() {
+                    confetti({
+                        particleCount: 5000,
+                        spread: 500,
+                        origin: { y: 0.4 }
+                    });
+                }
+            },
+            mounted() {
+                this.cycleStudents();
+            }
+        });
+    </script>
+</body>
+</html>
